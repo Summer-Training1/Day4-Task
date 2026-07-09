@@ -10,10 +10,18 @@ from reportlab.pdfgen import canvas
 
 load_dotenv()
 
+if not os.getenv("GEMINI_API_KEY"):
+    print("Error: GEMINI_API_KEY not found Check your .env file.")
+    exit()
+
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-with open("input.txt", "r", encoding="utf-8") as file:
-    input_text = file.read()
+try:
+    with open("input.txt", "r", encoding="utf-8") as file:
+        input_text = file.read()
+except FileNotFoundError:
+    print("Error: input.txt not found.")
+    exit()
 
 user_prompt = input("What would you like me to do with this text? ")
 prompt = f"{user_prompt}:\n\n{input_text}"
